@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Fundo escuro */
+    color: #e0e0e0; /* Texto claro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: #1e1e1e; /* Cor do card */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #bb86fc; /* Tom roxo para títulos */
+    margin-bottom: 1rem;
+}
+
+form {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+}
+
+input, button {
+    width: calc(100% - 2rem);
+    padding: 0.8rem; /* Padding reduzido */
+    margin: 0.5rem 0;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+button {
+    background-color: #bb86fc;
+    color: #121212;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #9c6cde;
+}
+
+.message {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+.message.success {
+    background-color: #4CAF5033; /* Fundo verde com transparência */
+    color: #4CAF50; /* Texto verde */
+}
+
+.message.error {
+    background-color: #F4433633; /* Fundo vermelho com transparência */
+    color: #F44336; /* Texto vermelho */
+}
+
+.message:empty {
+    display: none;
+}
