@@ -5,52 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticação XP</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tahoma&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="xp-login-window">
-        <div class="xp-title-bar">
-            <span>XP Authentication</span>
-            <div class="xp-title-bar-controls">
-                <button class="xp-button minimize"></button>
-                <button class="xp-button maximize"></button>
-                <button class="xp-button close"></button>
+
+<div class="up-bar"><span>              </span></div>
+
+    <div class="login-container">
+        <!-- Seção de boas-vindas à esquerda -->
+        <div class="welcome-section">
+            <img src="https://windows-xp.netlify.app/img/windows-xp-logo-white-text-transparent-bg-cropped.png" alt="Windows XP Logo" class="win-logo">
+            <p>Para começar, clique no seu nome de usuário</p>
+        </div>
+
+        <!-- Divisor vertical -->
+        <div class="divider"></div>
+
+        <!-- Seção de usuário à direita -->
+        <div class="user-section">
+            <div id="login-user-card" class="user-account">
+                <img src="https://pbs.twimg.com/media/Ej5hCJnXcAEGgXi.jpg:large" alt="Avatar do Usuário" class="user-avatar">
+                <span class="user-name">Login</span>
+            </div>
+            <div id="register-user-card" class="user-account">
+                 <img src="https://preview.redd.it/tbzkv5zf8oc51.jpg?width=2800&format=pjpg&auto=webp&s=7cfec3f1f4b286db120268a43833ea63be651e74" alt="Avatar do Convidado" class="user-avatar">
+                <span class="user-name">Registrar (convidado)</span>
             </div>
         </div>
-        
-        <div class="xp-content">
-            <div id="message"></div>
+    </div>
 
-            <div class="auth-section">
-                <div class="user-card">
-                    <div class="xp-icon">👤</div>
-                    <div class="user-forms">
-                        <form id="loginForm">
-                            <h2>Login</h2>
-                            <input type="text" id="loginUser" placeholder="Usuário" required>
-                            <input type="password" id="loginPass" placeholder="Senha" required>
-                            <button type="submit" class="blue-btn">Entrar</button>
-                        </form>
+    <!-- Barra inferior -->
+    <div class="shutdown-bar">
+        <button class="shutdown-button">
+            <div class="shutdown-icon"></div>
+            <span>Desligar o computador</span>
+        </button>
+    </div>
 
-                        <form id="registerForm">
-                            <h2>Registro</h2>
-                            <input type="text" id="regUser" placeholder="Novo Usuário" required>
-                            <input type="password" id="regPass" placeholder="Nova Senha" required>
-                            <button type="submit" class="green-btn">Registrar</button>
-                        </form>
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="modal-title-bar">
+                <span class="modal-title">Fazer logon no Windows</span>
+                <button class="modal-close-button" data-modal="loginModal">X</button>
+            </div>
+            <div class="modal-content">
+                <img src="https://blob.gifcities.org/gifcities/XSLGXNVYSM5IJTPRQJEVY76WCRDFJ3B4.gif" alt="Windows XP Logo" class="modal-logo" style="height: 100px; width: 100px;">
+                <form id="loginForm">
+                    <label for="loginUser">Nome de usuário:</label>
+                    <input type="text" id="loginUser" class="modal-input" required>
+                    <label for="loginPass">Senha:</label>
+                    <input type="password" id="loginPass" class="modal-input" required>
+                    <div id="message-container-login">
+                         <div id="message" class="message"></div>
                     </div>
-                </div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="modal-button-ok">OK</button>
+                        <button type="button" class="modal-button-cancel" data-modal="loginModal">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="xp-taskbar">
-        <div class="start-button">
-            <span>Iniciar</span>
+    <!-- Modal de Registro -->
+    <div id="registerModal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="modal-title-bar">
+                <span class="modal-title">Criar nova conta</span>
+                <button class="modal-close-button" data-modal="registerModal">X</button>
+            </div>
+            <div class="modal-content">
+                <form id="registerForm">
+                    <label for="regUser">Nome de usuário:</label>
+                    <input type="text" id="regUser" class="modal-input" placeholder="Novo Usuário" required>
+                    <label for="regPass">Senha:</label>
+                    <input type="password" id="regPass" class="modal-input" placeholder="Nova Senha" required>
+                     <div id="message-container-register"></div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="modal-button-ok">Registrar</button>
+                        <button type="button" class="modal-button-cancel" data-modal="registerModal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="clock" id="clock">00:00:00</div>
     </div>
-
 
     <script src="script.js"></script>
 </body>
