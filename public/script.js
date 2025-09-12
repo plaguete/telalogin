@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Contêineres das mensagens
     const message = document.getElementById('message');
-    const messageContainerLogin = document.getEementById('message-container-login');
+    const messageContainerLogin = document.getElementById('message-container-login');
     const messageContainerRegister = document.getElementById('message-container-register');
 
     const openModal = (modal, messageContainer) => {
@@ -26,11 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'none';
     };
 
-    const pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false }
-      });
-      
     // Abrir modais
     loginUserCard.addEventListener('click', () => openModal(loginModal, messageContainerLogin));
     registerUserCard.addEventListener('click', () => openModal(registerModal, messageContainerRegister));
