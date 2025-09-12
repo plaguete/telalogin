@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="up-bar">
+        <span>Dashboard</span>
+    </div>
+
+    <div class="login-container">
+        <div class="welcome-section">
+            <h1 id="welcomeMessage">Bem-vindo ao Dashboard!</h1>
+            <p id="dashboardData">Carregando seus dados...</p>
+        </div>
+
+        <div class="user-section">
+            <div class="user-account" onclick="openChangePasswordModal()">
+                <img src="https://cdn-icons-png.flaticon.com/512/159/159469.png" alt="Alterar Senha" class="user-avatar">
+                <span class="user-name">Alterar Senha</span>
+            </div>
+            
+            <div class="user-account" onclick="openDeleteAccountModal()">
+                <img src="https://cdn-icons-png.flaticon.com/512/3405/3405244.png" alt="Deletar Conta" class="user-avatar">
+                <span class="user-name">Deletar Conta</span>
+            </div>
+
+            <div class="user-account" onclick="logout()">
+                <img src="https://cdn-icons-png.flaticon.com/512/126/126467.png" alt="Sair" class="user-avatar">
+                <span class="user-name">Sair</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Alterar Senha -->
+    <div id="changePasswordModal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="modal-title-bar">
+                <span class="modal-title">Alterar Senha</span>
+                <button class="modal-close-button" data-modal="changePasswordModal">X</button>
+            </div>
+            <div class="modal-content">
+                <form id="changePasswordForm">
+                    <label for="currentPassword">Senha Atual:</label>
+                    <input type="password" id="currentPassword" class="modal-input" required>
+                    
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" class="modal-input" required>
+                    
+                    <label for="confirmPassword">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirmPassword" class="modal-input" required>
+                    
+                    <div id="message-container-changePassword"></div>
+                    
+                    <div class="modal-buttons">
+                        <button type="submit" class="modal-button-ok">Alterar</button>
+                        <button type="button" class="modal-button-cancel" data-modal="changePasswordModal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Deletar Conta -->
+    <div id="deleteAccountModal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="modal-title-bar">
+                <span class="modal-title">Deletar Conta</span>
+                <button class="modal-close-button" data-modal="deleteAccountModal">X</button>
+            </div>
+            <div class="modal-content">
+                <p>Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita.</p>
+                <form id="deleteAccountForm">
+                    <label for="deletePassword">Digite sua senha para confirmar:</label>
+                    <input type="password" id="deletePassword" class="modal-input" required>
+                    
+                    <div id="message-container-deleteAccount"></div>
+                    
+                    <div class="modal-buttons">
+                        <button type="submit" class="modal-button-ok" style="background-color: #d9534f;">Deletar</button>
+                        <button type="button" class="modal-button-cancel" data-modal="deleteAccountModal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticação
+        const token = localStorage.getItem('authToken');
+        const username = localStorage.getItem('username');
+        
+        if (!token) {
+            alert('Acesso não autorizado. Redirecionando para login.');
+            window.location.href = 'index.html';
+        }
+
+        // Carregar dados do dashboard
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard-data', {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('dashboardData').textContent = data.data;
+                } else {
+                    document.getElementById('dashboardData').textContent = 'Erro ao carregar dados.';
+                    console.error(data.message);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('dashboardData').textContent = 'Erro de conexão.';
+            }
+        }
+
+        // Funções para os modais
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+        }
+
+        function openDeleteAccountModal() {
+            document.getElementById('deleteAccountModal').style.display = 'flex';
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('username');
+            window.location.href = 'index.html';
+        }
+
+        // Formulário de alteração de senha
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                showMessage('As senhas não coincidem.', true, 'changePassword');
+                return;
+            }
+            
+            const result = await changePassword(username, currentPassword, newPassword);
+            showMessage(result.message, !result.success, 'changePassword');
+            
+            if (result.success) {
+                setTimeout(() => {
+                    document.getElementById('changePasswordModal').style.display = 'none';
+                    document.getElementById('changePasswordForm').reset();
+                }, 2000);
+            }
+        });
+
+        // Formulário de exclusão de conta
+        document.getElementById('deleteAccountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const password = document.getElementById('deletePassword').value;
+            const result = await deleteAccount(username, password);
+            showMessage(result.message, !result.success, 'deleteAccount');
+            
+            if (result.success) {
+                setTimeout(() => {
+                    logout();
+                }, 2000);
+            }
+        });
+
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            if (username) {
+                document.getElementById('welcomeMessage').textContent = `Bem-vindo, ${username}!`;
+            }
+            loadDashboardData();
+            
+            // Adicionar listeners para fechar modais
+            document.querySelectorAll('.modal-close-button, .modal-button-cancel').forEach(button => {
+                button.addEventListener('click', () => {
+                    const modalId = button.getAttribute('data-modal');
+                    document.getElementById(modalId).style.display = 'none';
+                });
+            });
+        });
+
+        // Função auxiliar para mostrar mensagens
+        function showMessage(msg, isError = false, container = '') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isError ? 'error' : 'success'}`;
+            messageDiv.textContent = msg;
+            
+            const containerElement = document.getElementById(`message-container-${container}`);
+            containerElement.innerHTML = '';
+            containerElement.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
