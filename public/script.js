@@ -97,7 +97,7 @@ loginForm.addEventListener('submit', async (e) => {
     const data = await res.json();
     if (res.ok) { // res.ok verifica status 200-299
         // Redireciona para a página de sucesso, passando o nome do usuário como parâmetro
-        window.location.href = `success.html?user=${data.username}`;
+        window.location.href = `dashboard.html?user=${data.username}`;
     } else {
         showMessage(data.message, true);
     }

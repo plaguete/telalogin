@@ -138,7 +138,7 @@ body {
 }
 
 
-.user-avatar:hover{
+.user-account .user-avatar:hover{
     border: 2px solid rgb(255, 208, 0);
 }
 
