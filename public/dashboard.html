@@ -47,11 +47,11 @@
                     <label for="currentPassword">Senha Atual:</label>
                     <input type="password" id="currentPassword" class="modal-input" required>
                     
-                    <label for="newPassword">Nova Senha:</label>
-                    <input type="password" id="newPassword" class="modal-input" required>
-                    
-                    <label for="confirmPassword">Confirmar Nova Senha:</label>
-                    <input type="password" id="confirmPassword" class="modal-input" required>
+                    <form id="changePasswordForm" onsubmit="changePassword(event)">
+                        <label for="newPassword">Nova Senha:</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                        <button type="submit">Alterar Senha</button>
+                      </form>
                     
                     <div id="message-container-changePassword"></div>
                     
@@ -207,33 +207,9 @@
                 messageDiv.remove();
             }, 5000);
 
-            async function changePassword(event) {
-  event.preventDefault(); // Evita o reload da página
-
-  const newPassword = document.getElementById('newPassword').value;
-
-    try {
-        const response = await fetch('/api/change-password', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Envia o token
-        },
-        body: JSON.stringify({ newPassword }),
-        });
-
-        if (response.ok) {
-        alert('Senha alterada com sucesso!');
-        } else {
-        const error = await response.json();
-        alert(error.message || 'Erro ao alterar a senha.');
-        }
-    } catch (err) {
-        console.error('Erro ao alterar senha:', err);
-        alert('Erro ao alterar a senha. Tente novamente.');
-    }
-}
+            
         }
     </script>
+    <script src="api/dashboard-data.js" defer></script>
 </body>
 </html>
