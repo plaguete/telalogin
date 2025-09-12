@@ -104,15 +104,18 @@ loginForm.addEventListener('submit', async (e) => {
 });
 
 async function changePassword(username, currentPassword, newPassword) {
+    console.log('Enviando dados para alterar senha:', { username, currentPassword, newPassword });
+
     const res = await fetch('/api/change-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, currentPassword, newPassword })
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, currentPassword, newPassword })
     });
-  
+
     const data = await res.json();
+    console.log('Resposta do servidor:', data);
     return { success: res.ok, message: data.message };
-  }
+}
   
   // Função para deletar conta
   async function deleteAccount(username, password) {
