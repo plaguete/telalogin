@@ -102,3 +102,21 @@ loginForm.addEventListener('submit', async (e) => {
         showMessage(data.message, true);
     }
 });
+
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
+
+try {
+    console.log('Tentando registrar usuário:', username);
+    const passwordHash = await bcrypt.hash(password, 10);
+    await pool.query('INSERT INTO users (username, password_hash) VALUES ($1, $2)', [username, passwordHash]);
+    res.status(201).json({ message: 'Usuário registrado com sucesso!' });
+} catch (err) {
+    console.error('Erro ao registrar usuário:', err);
+    if (err.code === '23505') {
+        return res.status(409).json({ message: 'Este usuário já existe.' });
+    }
+    res.status(500).json({ message: 'Erro ao registrar. Tente novamente.' });
+}
