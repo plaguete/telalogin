@@ -67,16 +67,19 @@ registerForm.addEventListener('submit', async (e) => {
     const username = document.getElementById('regUser').value;
     const password = document.getElementById('regPass').value;
 
-    // Simulação de resposta da API para fins de demonstração
-    console.log("Tentando registrar:", { username, password });
-    if (username && password) {
-        showMessage('Usuário registrado com sucesso!', false);
-        setTimeout(() => {
-             document.getElementById('registerModal').style.display = 'none';
-        }, 1500);
+    const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+        showMessage(data.message, false);
+        // Limpa os inputs do formulário de registro
         registerForm.reset();
     } else {
-        showMessage('Por favor, preencha todos os campos.', true);
+        showMessage(data.message, true);
     }
 });
 
@@ -84,12 +87,18 @@ loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('loginUser').value;
     const password = document.getElementById('loginPass').value;
-    
-    // Simulação de resposta da API para fins de demonstração
-    console.log("Tentando logar:", { username, password });
-    if (username === 'user' && password === '123') {
-        window.location.href = `success.html?user=${username}`;
+
+    const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+    if (res.ok) { // res.ok verifica status 200-299
+        // Redireciona para a página de sucesso, passando o nome do usuário como parâmetro
+        window.location.href = `success.html?user=${data.username}`;
     } else {
-        showMessage('Usuário ou senha inválidos.', true);
+        showMessage(data.message, true);
     }
 });
