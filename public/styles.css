@@ -27,7 +27,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 90px;
+    height: 120px;
     background: linear-gradient(to bottom, #1d43a9, #12338b);
     display: flex;
     justify-content: flex-start;
@@ -45,7 +45,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 50px;
+    height: 120px;
     background: linear-gradient(to bottom, #1d43a9, #12338b);
     justify-content: flex-start;
     align-items: center;
@@ -73,6 +73,8 @@ body {
 
 /* Seção de boas-vindas à esquerda */
 .welcome-section {
+    width: 700px;
+    height: 700px;
     text-align: left;
     display: flex;
     flex-direction: column;
@@ -104,6 +106,7 @@ body {
 
 /* Seção de usuário à direita */
 .user-section {
+    width: 700px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -116,11 +119,12 @@ body {
     padding: 10px;
     border-radius: 6px;
     cursor: pointer;
+    opacity: 75%;
     transition: background-color 0.2s;
 }
 
 .user-account:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 100%;
 }
 
 .user-avatar {
@@ -128,6 +132,14 @@ body {
     height: 64px;
     border-radius: 4px;
     border: 2px solid white;
+    box-shadow: 1px 25px 39px -26px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 1px 25px 39px -26px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 25px 39px -26px rgba(0,0,0,0.75);
+}
+
+
+.user-avatar:hover{
+    border: 2px solid rgb(255, 208, 0);
 }
 
 .user-name {
