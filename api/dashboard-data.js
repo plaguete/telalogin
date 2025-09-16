@@ -22,7 +22,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
     }
 
     try {
-        const response = await fetch('/api/change-password', {
+        const response = await fetch('http://localhost:3000/api/change-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,23 +33,21 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
                 newPassword: newPassword
             })
         });
-
-        const data = await response.json();
-        
-        if (response.ok) {
-            showMessage(data.message, false);
-            document.getElementById('changePasswordForm').reset();
-        } else {
-            showMessage(data.message, true);
+    
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
         }
+    
+        const data = await response.json();
+        showMessage(data.message, false);
+        document.getElementById('changePasswordForm').reset();
     } catch (error) {
-        showMessage('Erro ao conectar com o servidor', true);
-    }
-});
+        console.error('Erro na requisição:', error);
+        showMessage(`Erro: ${error.message}`, true);
+     }
 
 function showMessage(msg, isError) {
     const messageDiv = document.getElementById('passwordChangeMessage');
     messageDiv.textContent = msg;
     messageDiv.className = `message ${isError ? 'error' : 'success'}`;
 }
-
