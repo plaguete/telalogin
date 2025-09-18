@@ -1,10 +1,8 @@
+// api/change-password.js (atualizado)
 require('dotenv').config();
-const express = require('express');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
-
-const app = express();
-app.use(express.json());
+const authMiddleware = require('./auth-middleware');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -12,14 +10,16 @@ const pool = new Pool({
 });
 
 module.exports = async (req, res) => {
-  app(req, res, async () => {
+  // Usar o middleware de autenticação
+  await authMiddleware(req, res, async () => {
     if (req.method !== 'POST') {
       return res.status(405).json({ message: 'Método não permitido.' });
     }
 
-    const { username, currentPassword, newPassword } = req.body;
+    const { currentPassword, newPassword } = req.body;
+    const username = req.user.username;
 
-    if (!username || !currentPassword || !newPassword) {
+    if (!currentPassword || !newPassword) {
       return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
     }
 
@@ -65,9 +65,3 @@ module.exports = async (req, res) => {
     }
   });
 };
-
-// Adicione esta verificação após verificar a senha atual
-const isSamePassword = await bcrypt.compare(newPassword, user.password_hash);
-if (isSamePassword) {
-    return res.status(400).json({ message: 'A nova senha não pode ser igual à senha atual.' });
-}

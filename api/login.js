@@ -1,12 +1,8 @@
-// api/login.js (atualizado)
+// Substitua todo o conteúdo do arquivo por:
 require('dotenv').config();
-const express = require('express');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-
-const app = express();
-app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -14,40 +10,49 @@ const pool = new Pool({
 });
 
 module.exports = async (req, res) => {
-  app(req, res, async () => {
-    if (req.method !== 'POST') {
-      return res.status(405).json({ message: 'Método não permitido.' });
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Usuário e senha são obrigatórios.' });
+  }
+
+  let client;
+  try {
+    client = await pool.connect();
+    const result = await client.query(
+      'SELECT id, username, password_hash FROM users WHERE username = $1',
+      [username]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
     }
 
-    const { username, password } = req.body;
+    const user = result.rows[0];
+    const passwordMatch = await bcrypt.compare(password, user.password_hash);
 
-    try {
-      const result = await pool.query('SELECT password_hash FROM users WHERE username = $1', [username]);
-
-      if (result.rows.length === 0) {
-        return res.status(404).json({ message: 'Usuário não encontrado.' });
-      }
-
-      const user = result.rows[0];
-      const passwordMatch = await bcrypt.compare(password, user.password_hash);
-
-      if (passwordMatch) {
-        // Gerar token de autenticação
-        const authToken = crypto.randomBytes(16).toString('hex');
-        // Atualizar o token no banco de dados (você precisará adicionar uma coluna 'auth_token' na tabela users)
-        await pool.query('UPDATE users SET auth_token = $1 WHERE username = $2', [authToken, username]);
-        
-        res.status(200).json({ 
-          message: 'Login bem-sucedido!', 
-          username: username,
-          token: authToken
-        });
-      } else {
-        res.status(401).json({ message: 'Senha incorreta.' });
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Erro no login. Tente novamente.' });
+    if (passwordMatch) {
+      const authToken = crypto.randomBytes(32).toString('hex');
+      await client.query(
+        'UPDATE users SET auth_token = $1 WHERE id = $2',
+        [authToken, user.id]
+      );
+      
+      res.status(200).json({ 
+        message: 'Login bem-sucedido!', 
+        username: user.username,
+        token: authToken
+      });
+    } else {
+      res.status(401).json({ message: 'Senha incorreta.' });
     }
-  });
+  } catch (err) {
+    console.error('Erro no login:', err);
+    res.status(500).json({ 
+      message: 'Erro interno no servidor.',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  } finally {
+    if (client) client.release();
+  }
 };

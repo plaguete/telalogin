@@ -3,149 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Alterar Senha</title>
+    <title>Dashboard - Windows XP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tahoma&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        } 
-
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: 'Tahoma', sans-serif;
-            background: linear-gradient(to bottom, #395eb4, #73a3e1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            overflow: auto;
-            padding: 20px;
-        }
-
-        .dashboard-container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        h1 {
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-            margin-top: 0;
-        }
-
-        .change-password-section {
-            margin: 20px 0;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-        }
-
-        .change-password-section h2 {
-            margin-top: 0;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }
-
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0 15px 0;
-            border: 1px solid #7F9DB9;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+        .delete-account-button {
+            background-color: #d9534f;
             margin-top: 20px;
         }
-
-        .modal-button-ok, .modal-button-cancel {
-            border-top: 1px solid #FFFFFF;
-            border-left: 1px solid #FFFFFF;
-            border-right: 1px solid #4D4D4D;
-            border-bottom: 1px solid #4D4D4D;
-            background-color: #ECE9D8;
-            padding: 8px 20px;
-            cursor: pointer;
-            min-width: 100px;
-            font-family: 'Tahoma', sans-serif;
-        }
-
-        .modal-button-ok:hover, .modal-button-cancel:hover {
-            border-color: #4D4D4D #FFF #FFF #4D4D4D;
-        }
-
-        .message {
-            padding: 10px;
-            margin: 15px 0;
-            border: 1px solid;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .message.success {
-            background-color: #dff0d8;
-            border-color: #d6e9c6;
-            color: #3c763d;
-        }
-
-        .message.error {
-            background-color: #f2dede;
-            border-color: #ebccd1;
-            color: #a94442;
-        }
-
-        .shutdown-button {
-            background: transparent;
-            border: none;
-            color: white;
-            font-family: 'Tahoma', sans-serif;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            gap: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .shutdown-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .info-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 30px;
-            font-size: 14px;
+        
+        .delete-account-button:hover {
+            background-color: #c9302c;
         }
     </style>
 </head>
 <body>
+    <div class="up-bar"><span></span></div>
+
     <div class="dashboard-container">
-        <h1>Bem-vindo, <span id="loggedUser">Usuário</span>!</h1>
+        <h1>Bem-vindo, <span id="loggedUser"></span>!</h1>
         
         <div class="change-password-section">
             <h2>Alterar Senha</h2>
@@ -171,81 +49,33 @@
             <span>Sair</span>
         </button>
 
-        <div class="info-box">
-            <p><strong>Nota:</strong> Esta é uma demonstração frontend. Em um sistema real, você precisaria:</p>
-            <ol>
-                <li>Configurar um servidor backend com o endpoint <code>/api/change-password</code></li>
-                <li>Usar a URL correta do servidor nas requisições fetch</li>
-                <li>Implementar autenticação e validação adequadas no servidor</li>
-            </ol>
+        <button id="deleteAccountButton" class="shutdown-button delete-account-button">
+            <span>Deletar Conta</span>
+        </button>
+    </div>
+
+    <!-- Modal para Deletar Conta -->
+    <div id="deleteAccountModal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="modal-title-bar">
+                <span class="modal-title">Deletar Conta</span>
+                <button class="modal-close-button" data-modal="deleteAccountModal">X</button>
+            </div>
+            <div class="modal-content">
+                <p>Tem certeza que deseja deletar sua conta? Esta ação é irreversível.</p>
+                <form id="deleteAccountForm">
+                    <label for="confirmPasswordDelete">Digite sua senha para confirmar:</label>
+                    <input type="password" id="confirmPasswordDelete" class="modal-input" required>
+                    <div id="deleteAccountMessage" class="message"></div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="modal-button-ok" style="background-color: #d9534f;">Deletar Conta</button>
+                        <button type="button" class="modal-button-cancel" data-modal="deleteAccountModal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Simulação de usuário logado
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('user') || 'UsuarioXP';
-        document.getElementById('loggedUser').textContent = username;
-
-        // Logout
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            alert('Redirecionando para a página inicial...');
-            window.location.href = 'index.html';
-        });
-
-        // Alteração de senha
-        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            // Validações básicas
-            if (newPassword !== confirmPassword) {
-                showMessage('As senhas não coincidem', true);
-                return;
-            }
-
-            if (newPassword.length < 6) {
-                showMessage('A nova senha deve ter pelo menos 6 caracteres', true);
-                return;
-            }
-
-            // Simulação de uma requisição para o servidor
-            try {
-                showMessage('Processando...', false);
-                
-                // Em um ambiente real, você usaria:
-                // const response = await fetch('https://seu-servidor.com/api/change-password', {
-                //   method: 'POST',
-                //   headers: { 'Content-Type': 'application/json' },
-                //   body: JSON.stringify({ username, currentPassword, newPassword })
-                // });
-                
-                // Simulando uma resposta do servidor após 1,5 segundos
-                setTimeout(() => {
-                    // Simulação de sucesso (em um caso real, isso viria do servidor)
-                    const success = Math.random() > 0.3; // 70% de chance de sucesso para demonstração
-                    
-                    if (success) {
-                        showMessage('Senha alterada com sucesso!', false);
-                        document.getElementById('changePasswordForm').reset();
-                    } else {
-                        showMessage('Erro: Senha atual incorreta', true);
-                    }
-                }, 1500);
-                
-            } catch (error) {
-                showMessage('Erro ao conectar com o servidor: ' + error.message, true);
-            }
-        });
-
-        function showMessage(msg, isError) {
-            const messageDiv = document.getElementById('passwordChangeMessage');
-            messageDiv.textContent = msg;
-            messageDiv.className = `message ${isError ? 'error' : 'success'}`;
-        }
-    </script>
+    <script src="dashboard-data.js"></script>
 </body>
 </html>

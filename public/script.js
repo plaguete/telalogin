@@ -1,4 +1,3 @@
-// --- CÓDIGO ADICIONADO PARA GERENCIAR A INTERFACE ---
 
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos da UI
@@ -67,11 +66,11 @@ registerForm.addEventListener('submit', async (e) => {
     const username = document.getElementById('regUser').value;
     const password = document.getElementById('regPass').value;
 
-    const res = await fetch('/api/register', {
+    const res = await fetch('./api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
-    });
+      });
 
     const data = await res.json();
     if (res.ok) {
@@ -88,6 +87,7 @@ loginForm.addEventListener('submit', async (e) => {
     const username = document.getElementById('loginUser').value;
     const password = document.getElementById('loginPass').value;
 
+    // Alterado de './api/login' para '/api/login'
     const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,13 +95,17 @@ loginForm.addEventListener('submit', async (e) => {
     });
 
     const data = await res.json();
-    if (res.ok) { // res.ok verifica status 200-299
-        // Redireciona para a página de sucesso, passando o nome do usuário como parâmetro
+    if (res.ok) {
+        // Salvar token no sessionStorage
+        sessionStorage.setItem('authToken', data.token);
+        sessionStorage.setItem('username', data.username);
+        
+        // Redirecionar para o dashboard
         window.location.href = `dashboard.html?user=${data.username}`;
     } else {
         showMessage(data.message, true);
     }
 });
 
-app.post('/api/change-password', require('./api/change-password'));
+//app.post('./api/change-password', require('./api/change-password'));
 
