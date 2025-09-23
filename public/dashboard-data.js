@@ -1,4 +1,4 @@
-// public/dashboard-data.js (atualizado)
+// public/dashboard-data.js (corrigido)
 // Mostrar nome do usuário logado
 const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get('user') || sessionStorage.getItem('username');
@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const data = await response.json();
-        // Você pode usar os dados aqui se quiser exibir algo específico
         console.log('Dados privados:', data);
     } catch (error) {
         console.error('Erro ao carregar dados do dashboard:', error);
@@ -91,43 +90,23 @@ document.getElementById('changePasswordForm').addEventListener('submit', async (
     }
 });
 
-// Modal de deletar conta
-const deleteAccountButton = document.getElementById('deleteAccountButton');
-const deleteAccountModal = document.getElementById('deleteAccountModal');
-const deleteAccountForm = document.getElementById('deleteAccountForm');
-const deleteAccountMessage = document.getElementById('deleteAccountMessage');
-
-// Abrir modal
-deleteAccountButton.addEventListener('click', () => {
-    deleteAccountModal.style.display = 'flex';
-});
-
-// Fechar modal quando clicar fora
-deleteAccountModal.addEventListener('click', (e) => {
-    if (e.target === deleteAccountModal) {
-        deleteAccountModal.style.display = 'none';
-    }
-});
-
-// Fechar modal com botão de cancelar
-document.querySelector('[data-modal="deleteAccountModal"].modal-button-cancel').addEventListener('click', () => {
-    deleteAccountModal.style.display = 'none';
-});
-
-// Fechar modal com botão X
-document.querySelector('[data-modal="deleteAccountModal"].modal-close-button').addEventListener('click', () => {
-    deleteAccountModal.style.display = 'none';
-});
-
-// Enviar formulário de deletar conta
-deleteAccountForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
+// Deletar conta - CÓDIGO CORRIGIDO
+async function deleteAccount() {
     const password = document.getElementById('confirmPasswordDelete').value;
     const token = sessionStorage.getItem('authToken');
+    const username = sessionStorage.getItem('username');
+
+    if (!password) {
+        alert("Por favor, digite sua senha para confirmar.");
+        return;
+    }
+
+    if (!confirm("Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita.")) {
+        return;
+    }
 
     try {
-        const response = await fetch('http://localhost:3000/api/delete-account', {
+        const response = await fetch('/api/delete-account', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -139,24 +118,35 @@ deleteAccountForm.addEventListener('submit', async (e) => {
             })
         });
 
+        const data = await response.json();
+        
         if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
+            throw new Error(data.message || `Erro: ${response.status}`);
         }
 
-        const data = await response.json();
-        showDeleteMessage(data.message, false);
+        alert("Conta deletada com sucesso! Redirecionando...");
         
         // Limpar storage e redirecionar
         sessionStorage.removeItem('authToken');
         sessionStorage.removeItem('username');
-        
-        // Redirecionar para a página inicial após 2 segundos
         setTimeout(() => {
             window.location.href = 'index.html';
-        }, 2000);
+        }, 1000);
+        
     } catch (error) {
-        console.error('Erro na requisição:', error);
-        showDeleteMessage(`Erro: ${error.message}`, true);
+        console.error('Erro ao deletar conta:', error);
+        alert(`Erro ao deletar conta: ${error.message}`);
+    }
+}
+
+// Adicionar event listener ao formulário de deletar conta
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteForm = document.getElementById('deleteAccountForm');
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            deleteAccount();
+        });
     }
 });
 
@@ -167,6 +157,14 @@ function showMessage(msg, isError) {
 }
 
 function showDeleteMessage(msg, isError) {
-    deleteAccountMessage.textContent = msg;
-    deleteAccountMessage.className = `message ${isError ? 'error' : 'success'}`;
+    const messageDiv = document.getElementById('deleteAccountMessage');
+    messageDiv.textContent = msg;
+    messageDiv.className = `message ${isError ? 'error' : 'success'}`;
+    messageDiv.style.display = 'block';
+}
+
+function logout() {
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('username');
+    window.location.href = 'index.html';
 }

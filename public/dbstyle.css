@@ -1,0 +1,201 @@
+/* Adicione estas regras ao final do arquivo CSS existente */
+
+/* Estilos da Área de Trabalho do Windows XP */
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    background-color: #008080;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzAwODA4MCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+    padding: 20px;
+    overflow: hidden;
+}
+
+.desktop-icon {
+    width: 70px;
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.desktop-icon img {
+    width: 32px;
+    height: 32px;
+}
+
+.desktop-icon span {
+    display: block;
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 1px black;
+    margin-top: 5px;
+}
+
+/* Barra de Tarefas */
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, #0A246A, #A6CAF0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    border-top: 1px solid #5a7edc;
+    z-index: 1000;
+}
+
+.start-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    background: linear-gradient(to bottom, #0A246A, #A6CAF0);
+    border: 1px solid #5a7edc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.start-icon {
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="white" d="M8 0L0 5l3 1v6l5 3 5-3V6l3-1z"/></svg>') no-repeat center;
+}
+
+.taskbar-right {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    font-size: 12px;
+}
+
+.clock {
+    padding: 3px 8px;
+    background: linear-gradient(to bottom, #0A246A, #A6CAF0);
+    border: 1px solid #5a7edc;
+    border-radius: 3px;
+}
+
+/* Menu Iniciar */
+.start-menu {
+    position: fixed;
+    bottom: 40px;
+    left: 5px;
+    width: 250px;
+    background-color: #ECE9D8;
+    border-top: 2px solid #FFFFFF;
+    border-left: 2px solid #FFFFFF;
+    border-right: 2px solid #4D4D4D;
+    border-bottom: 2px solid #4D4D4D;
+    display: none;
+    z-index: 1001;
+}
+
+.start-menu-header {
+    background: linear-gradient(to right, #0A246A, #A6CAF0);
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.start-menu-items {
+    padding: 10px 0;
+}
+
+.start-menu-item {
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+.start-menu-item:hover {
+    background-color: #0A246A;
+    color: white;
+}
+
+.start-menu-footer {
+    padding: 10px;
+    border-top: 1px solid #4D4D4D;
+    text-align: right;
+    font-size: 12px;
+}
+
+/* Janelas do Windows */
+.window {
+    position: absolute;
+    background-color: #ECE9D8;
+    border-top: 2px solid #FFFFFF;
+    border-left: 2px solid #FFFFFF;
+    border-right: 2px solid #4D4D4D;
+    border-bottom: 2px solid #4D4D4D;
+    min-width: 300px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+
+.title-bar {
+    background: linear-gradient(to right, #0A246A, #A6CAF0);
+    padding: 4px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+}
+
+.window-title {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-shadow: 1px 1px #0A246A;
+}
+
+.window-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.window-control {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.minimize-btn {
+    background-color: #0A246A;
+    color: white;
+    border: 1px solid #FFFFFF;
+}
+
+.maximize-btn {
+    background-color: #0A246A;
+    color: white;
+    border: 1px solid #FFFFFF;
+}
+
+.close-btn {
+    background-color: #D64B3F;
+    color: white;
+    border: 1px solid #FFFFFF;
+}
+
+.window-content {
+    padding: 10px;
+    color: #000;
+}
+
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+}
